@@ -1,4 +1,4 @@
-let cognitiveServices = require('cognitive-services');
+import * as cognitiveServices from 'cognitive-services';
 
 let client = new cognitiveServices.computerVision({
     apiKey: "<key>",
@@ -23,5 +23,5 @@ client.analyzeImage({
     headers,
     body
 }).then((response) => {
-    console.log(response);
+    response.description.captions.forEach(c => console.log(c.text));
 });
