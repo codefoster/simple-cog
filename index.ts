@@ -1,8 +1,11 @@
 import * as cognitiveServices from 'cognitive-services';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 let client = new cognitiveServices.computerVision({
-    apiKey: "<key>",
-    endpoint: "<endpoint>"
+    apiKey: process.env.VISION_API_KEY || "",
+    endpoint: process.env.VISION_ENDPOINT || ""
 });
 
 let parameters = {

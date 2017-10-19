@@ -10,6 +10,8 @@
   "author": "Jeremy Foster <jeremy.foster@live.com> (http://codefoster.com)",
   "license": "Apache-2.0",
   "dependencies": {
-    "cognitive-services": "^0.3.2"
+    "@types/dotenv": "^4.0.1",
+    "cognitive-services": "^0.3.2",
+    "dotenv": "^4.0.0"
   }
 }
