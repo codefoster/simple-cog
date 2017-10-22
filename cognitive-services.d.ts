@@ -59,46 +59,125 @@ declare module 'cognitive-services' {
 
     // VISION
     export class computerVision {
-        constructor(options: computerVisionOptions);
-        analyzeImage(options: analyzeImageOptions): Promise<analyzeImageReturn>;
-        describeImage(_ref3: any): any;
-        getHandwrittenTextOperationResult(_ref8: any): any;
+        constructor(options: ComputerVisionOptions);
+        analyzeImage(options: AnalyzeImageOptions): Promise<AnalyzeImageReturn>;
+        describeImage(options: describeImageOptions): Promise<DescribeImageReturn>;
+        getHandwrittenTextOperationResult(options: GetHandwrittenTextOperationResultOptions): GetHandwrittenTextOperationResultReturn;
         getThumbnail(_ref4: any): any;
         listDomainSpecificModels(): any;
         ocr(_ref5: any): any;
-        recognizeDomainSpecificContent(_ref6: any): any;
-        recognizeHandwrittenText(_ref9: any): any;
+        recognizeDomainSpecificContent(options: RecognizeDomainSpecificContentOptions): RecognizeDomainSpecificContentReturn;
+        recognizeHandwrittenText(options: RecognizeHandwrittenTextOptions): Promise<string>;
         tagImage(_ref7: any): any;
     }
 
-    export interface computerVisionOptions {
+    export interface ComputerVisionOptions {
         apiKey: string,
         endpoint: string
     }
 
-    export interface analyzeImageOptions {
-        parameters?: any,
+    export interface AnalyzeImageOptions {
+        parameters?: { visualFeatures?: string, details?: string, language?: string },
+        headers?: { "Content-Type"?: string },
+        body?: { url?: string }
+    }
+
+    export interface AnalyzeImageParameters {
+        visualFeatures?: string,
+        details?: string,
+        language?: Language
+    }
+
+    export interface RecognizeDomainSpecificContentOptions {
+        parameters: { model: string },
         headers?: any,
         body?: any
     }
 
-    export interface analyzeImageParameters {
-        visualFeatures?: string,
-        details?: string,
-        language?: string
+    export interface RecognizeDomainSpecificContentReturn {
+        requestId: string,
+        metadata: {
+            width: number,
+            height: number,
+            format: string
+        },
+        result: any
     }
 
-    export interface analyzeImageReturn {
-        categories: { name: string, score: number, detail: any }[],
-        adult: { isAdultContent: boolean, isRacyContent: boolean, adultScore: number, racyScore: number },
-        tags: { name: string, confidence: number }[],
+    export interface RecognizeHandwrittenTextOptions {
+        parameters?: { handwriting?: boolean },
+        headers?: { "Content-Type"?: string },
+        body?: { url?: string }
+    }
+
+    export interface GetHandwrittenTextOperationResultOptions {
+        parameters: { operationId: string }
+    }
+
+    export interface GetHandwrittenTextOperationResultReturn {
+        status: string
+    }
+
+    export enum ClipartType {
+        NonClipart,
+        Ambiguous,
+        NormalClipart,
+        GoodClipart
+    }
+
+    export enum LineDrawingType {
+        NonLineDrawing,
+        LineDrawing
+    }
+
+    export interface rectangle {
+        left: number,
+        top: number,
+        width: number,
+        height: number
+    }
+
+    export enum Language {
+        English = "en",
+        SimplifiedChinese = "zh"
+    }
+
+    export interface ComputerVisionBaseReturn {
         description: {
             tags: string[],
             captions: { text: string, confidence: number }[]
+            requestId: string,
+            metadata: {
+                width: number,
+                height: number,
+                format: string
+            },
         }
-        requestId: string,
-        metadata: { width: number, height: number, format: string },
-        faces: { age: number, gender: string, faceRectangle: any }[],
+    }
+
+    export interface DescribeImageReturn extends ComputerVisionBaseReturn { }
+
+    export interface AnalyzeImageReturn extends ComputerVisionBaseReturn {
+        categories: {
+            name: string,
+            score: number,
+            detail: any | { celebrities: { name: string, faceRectangle: rectangle, confidence: number }[] } | { landmarks: { name: string, confidence: number } }
+        }[],
+        adult: {
+            isAdultContent: boolean,
+            isRacyContent: boolean,
+            adultScore: number,
+            racyScore: number
+        },
+        tags: {
+            name: string,
+            confidence: number
+        }[],
+        faces: {
+            age: number,
+            gender: string,
+            faceRectangle: any
+        }[],
         color: {
             dominantColorForeground: string,
             dominantColorBackground: string,
@@ -106,10 +185,16 @@ declare module 'cognitive-services' {
             accentColor: string,
             isBWImg: boolean
         },
-        imageType:{
-            clipArtType:number,
-            lineDrawingType:number
+        imageType: {
+            clipArtType: ClipartType,
+            lineDrawingType: LineDrawingType
         }
+    }
+
+    export interface describeImageOptions {
+        parameters?: { maxCandidates?: string },
+        headers?: { "Content-Type"?: string, "Ocp-Apim-Subscription-Key"?: string },
+        body?: any
     }
 
     // EMOTION
