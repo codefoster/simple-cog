@@ -1,26 +1,17 @@
-import * as cognitiveServices from 'cognitive-services';
-import * as dotenv from 'dotenv';
+import { computerVision } from 'cognitive-services';
 
-dotenv.config();
-
-let client = new cognitiveServices.computerVision({
-    apiKey: process.env.VISION_API_KEY || "",
-    endpoint: process.env.VISION_ENDPOINT || ""
+let client = new computerVision({
+    apiKey: "<key>",
+    endpoint: "<endpoint>"
 });
 
-let parameters: cognitiveServices.AnalyzeImageParameters = {
-    visualFeatures: "ImageType,Faces,Adult,Categories,Color,Tags,Description",
-    details: "Celebrities,Landmarks"
-};
-
-let headers = {
-    "Content-Type": "application/json"
-};
-
-var body = {
-    "url": 'http://az616578.vo.msecnd.net/files/2016/10/09/636115830685164048-686058602_friends.jpg'
-};
-
-client.analyzeImage({ parameters, headers, body }).then((response) => {
+client.analyzeImage({
+    parameters: {
+        "visualFeatures": "ImageType,Faces,Adult,Categories,Color,Tags,Description",
+        "details": "Celebrities,Landmarks"
+    },
+    headers: { 'Content-Type': 'application/json' },
+    body: { "url": 'http://az616578.vo.msecnd.net/files/2016/10/09/636115830685164048-686058602_friends.jpg' }
+}).then((response) => {
     response.description.captions.forEach(c => console.log(c.text));
 });
